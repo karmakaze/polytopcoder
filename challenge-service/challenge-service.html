@@ -1,0 +1,89 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/core-ajax/core-ajax.html">
+<!-- 
+  `<challenge-service>` provides an API for a fake service -- 
+  _unquote_, the read-only social networking service!
+
+  Provides a very simple API: `challenges` returns the list of challenges.
+  `setFavorite` pretends to persist a user's favorite choice.
+
+  @element challenge-service
+  @demo 
+  @homepage http://www.polymer-project.org/docs/start/tutorial.html
+-->
+
+<!--
+  An array of challenge objects, with the following format:
+
+  <table border="0">
+    <tr>
+      <td><code>uid</code></td>
+      <td>Number</td>
+      <td>Unique ID for this challenge.</td>
+    </tr>
+     <tr>
+      <td><code>username</code></td>
+      <td>String</td>
+      <td>Poster's username.</td>
+    </tr>
+    <tr>
+      <td><code>avatar</code></td>
+      <td>String</td>
+      <td>URL for the user's avatar.</td>
+    </tr>  
+    <tr>
+      <td><code>text</code></td>
+      <td>String</td>
+      <td>Post text.</td>
+    </tr>  
+    <tr>
+      <td><code>favorite</code></td>
+      <td>Boolean</td>
+      <td>True if the current user favorited this challenge.</td>
+    </tr>
+  </table>
+  
+  @attribute challenges 
+  @type Array
+  @default []
+-->
+<polymer-element name="challenge-service" attributes="challenges">
+  <template>
+    <style>
+    :host {
+      display: none;
+    }
+    </style>
+    <core-ajax id="ajax"
+      auto
+      url="https://api.topcoder.com/v2/challenges/active?type=develop"
+      on-core-response="{{challengesLoaded}}"
+      handleAs="json">
+    </core-ajax>
+  </template>
+  <script>
+  Polymer('challenge-service', {
+    created: function() {
+      this.challenges = [];
+    },
+    challengesLoaded: function() {
+      // Make a copy of the loaded data
+      this.challenges = this.$.ajax.response.data.slice(0);
+    },
+    /** 
+     * Update the service with the current favorite value.
+     * (Two-way data binding updates the favorite value 
+     * stored locally.) If this was a real service, this
+     * method would do something useful.
+     * 
+     * @method setFavorite
+     * @param uid {Number} Unique ID for challenge.
+     * @param isFavorite {Boolean} True if the user marked this challenge as a favorite.
+     */
+    setFavorite: function(uid, isFavorite) {
+      // no service backend, just log the change
+      console.log('Favorite changed: ' + uid + ", now: " + isFavorite);
+    }
+  });
+  </script>
+</polymer-element>

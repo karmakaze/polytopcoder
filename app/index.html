@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+<head>
+
+  <title>unquote</title>
+
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../components/webcomponentsjs/webcomponents.js"></script>
+
+  <link rel="import" href="../components/font-roboto/roboto.html">
+  <link rel="import" href="../components/core-header-panel/core-header-panel.html">
+  <link rel="import" href="../components/core-toolbar/core-toolbar.html">
+  <link rel="import" href="../components/paper-tabs/paper-tabs.html">
+  <link rel="import" href="challenge-list.html">
+
+  <link rel="stylesheet" href="css/ngChallenges.min-v3.9.1.gz.css">
+
+  <style>
+  html,body {
+    height: 100%;
+    margin: 0;
+    background-color: #E5E5E5;
+    font-family: 'RobotoDraft', sans-serif;
+  }
+  .container {
+    min-width: 958px;
+    margin: 50px auto;
+    padding: 5px;
+  }
+  @media (min-width: 481px) {
+    #tabs {
+      width: 200px;
+    }
+    .container {
+    }
+  }
+  core-header-panel {
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  core-toolbar {
+    background: #03a9f4;
+    color: white;
+  }
+  #tabs {
+    width: 100%;
+    margin: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-transform: uppercase;
+  }
+  </style>
+
+</head>
+
+<body>
+  <core-header-panel>
+
+    <core-toolbar><a href="https://www.topcoder.com/"><img src="https://d2l7b0usk48cxd.cloudfront.net/prod/65/i/logo.png"/></a><span style="text-align: center; width: 40%"">The Challenges</span></core-toolbar>
+
+    <!-- main page content will go here -->
+    <paper-tabs id="tabs" selected="develop" self-end>
+      <paper-tab name="graphic">Graphic Design</paper-tab>
+      <paper-tab name="develop">Software Development</paper-tab>
+      <paper-tab name="data-science">Data Science</paper-tab>
+      <paper-tab name="mine">My Challenges Only</paper-tab>
+    </paper-tabs>
+
+    <div class="container" layout vertical center>
+      <challenge-list show="all"></challenge-list>
+    </div>
+
+  </core-header-panel>
+
+  <script>
+  var tabs = document.querySelector('paper-tabs');
+  var list = document.querySelector('challenge-list');
+
+  tabs.addEventListener('core-select', function() {
+    list.show = tabs.selected;
+  });
+  </script>
+</body>
+
+</html>

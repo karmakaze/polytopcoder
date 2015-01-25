@@ -1,0 +1,118 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../challenge-service/challenge-service.html">
+<link rel="import" href="challenge-card.html">
+
+<polymer-element name="challenge-list" attributes="show">
+  <template>
+    <style>
+    :host {
+      display: block;
+      width: 100%;
+    }
+    challenge-card {
+      margin-bottom: 4px;
+    }
+    * { margin: 0; padding: 0; border: 0; font-size: 100%; vertical-align: baseline; }
+    .challengesGrid { margin: auto; font-size: 12px; font-weight: 400; font-family: 'Source Sans Pro',Arial,Helvetica,sans-serif; }
+    .challengesGrid .ngHeaderCell { background-color: #f1f1f1; color: #666; line-height: 30px; vertical-align: middle; text-align: center; word-wrap: ; }
+    .ngHeaderCell { display: inline-block; vertical-align: middle; }
+    .ngCell { display: inline-block; vertical-align: middle; }
+    .center { text-align: center; }
+    .colTime .row { line-height: 16px; font-size: 11px; }
+    .col0 { width: 40px; }
+    .col1 { width: 270px; }
+    .col2 { width: 160px; }
+    .col3 { width: 80px; }
+    .col4 { width: 73px; }
+    .col5 { width: 90px; }
+    .col6 { width: 74px; }
+    .col7 { width: 74px; }
+    .col8 { width: 60px; }
+    </style>
+    
+    <challenge-service id="service" challenges="{{challenges}}"></challenge-service>
+
+    <!-- add markup here -->
+    <div layout vertical center>
+
+      <div class="challengesGrid">
+        <div class="challengeHeader">
+          <div class="ngHeaderCell col0">&nbsp;</div>
+          <div class="ngHeaderCell col1">Challenge</div>
+          <div class="ngHeaderCell col2">Timeline</div>
+          <div class="ngHeaderCell col3">Time Left</div>
+          <div class="ngHeaderCell col4">Prize</div>
+          <div class="ngHeaderCell col5">Current Phase</div>
+          <div class="ngHeaderCell col6">Registrants</div>
+          <div class="ngHeaderCell col7">Submissions</div>
+          <div class="ngHeaderCell col8">Forum</div>
+        </div>
+
+        <template repeat="{{challenge in challenges}}">
+          <challenge-card
+              favorite="{{challenge.favorite}}"
+              on-favorite-tap="{{handleFavorite}}"
+              hidden?="{{show == 'favorites' && !challenge.favorite}}">
+            <div style="vertical-align: middle">
+              <div class="ngCell center col0">{{ format_type(challenge.challengeType) }}</div>
+              <div class="ngCell col1">
+                <div><a href="{{'https://www.topcoder.com/challenge-details/'+ challenge.challengeId +'/?type=develop&lc='}}">{{ challenge.challengeName }}</a></div>
+                <div>&nbsp;</div>
+                <div>{{ format_platform_tech(challenge.platforms, challenge.technologies )}}</div>
+              </div>
+              <div class="ngCell colTime center col2">
+                <div class="row">Start date&nbsp;&nbsp;&nbsp;{{ format_date(challenge.registrationStartDate )}}</div>
+                <div class="row">Register by {{ format_date(challenge.registrationEndDate )}}</div>
+                <div class="row">Submit by&nbsp;&nbsp;&nbsp;{{ format_date(challenge.submissionEndDate )}}</div>
+              </div>
+              <div class="ngCell center col3"></div>
+              <div class="ngCell center col4">{{ format_currency(challenge.firstPlacePrize)}}
+                <br/>{{ format_currency(challenge.totalPrize - challenge.firstPlacePrize )}}</div>
+              <div class="ngCell center col5">{{ challenge.currentPhaseName }}</div>
+              <div class="ngCell center col6">{{ challenge.numRegistrants || '' }}</div>
+              <div class="ngCell center col7">{{ challenge.numSubmissions || '' }}</div>
+              <div class="ngCell center col8"><a href="{{ 'http://apps.topcoder.com/forums/?module=Category&categoryID='+ challenge.forumId }}">Forum</a></div>
+            </div>
+          </challenge-card>
+        </template>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+  Polymer({
+    format_type: function(t) {
+      return t.replace('Architecture', 'Arch')
+              .replace('Assembly Competition', 'AC')
+              .replace('Bug Hunt', 'Bug')
+              .replace('Content Creation', 'CC')
+              .replace('First2Finish', 'FF')
+              .replace('UI Prototype Competition', 'UI');
+    },
+    format_platform_tech: function(ps, ts) {
+      var o = {};
+      for (var i = ps.length; --i >= 0; ) {
+        var x = ps[i];
+        o[x] = x;
+      }
+      for (var i = ts.length; --i >= 0; ) {
+        var x = ts[i];
+        o[x] = x;
+      }
+      return Object.keys(o).sort().join(' ');
+    },
+    format_date: function(d) {
+      return d.substr(0, 10);
+    },
+    format_currency: function(a) {
+      return a ? '$'+ a : '';
+    },
+    handleFavorite: function(event, detail, sender) {
+      var challenge = sender.templateInstance.model.challenge;
+      this.$.service.setFavorite(challenge.uid, challenge.favorite);
+    }
+  });
+  </script>
+
+</polymer-element>
