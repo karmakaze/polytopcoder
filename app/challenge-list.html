@@ -15,6 +15,9 @@
     a {
       text-decoration: none;
     }
+    a:visited {
+      color: #0000FF;
+    }
     * { margin: 0; padding: 0; border: 0; font-size: 100%; vertical-align: baseline; }
     .challengesGrid { margin: auto; font-size: 12px; font-weight: 400; font-family: 'Source Sans Pro',Arial,Helvetica,sans-serif; }
     .challengesGrid .ngHeaderCell { background-color: #f1f1f1; color: #666; line-height: 30px; vertical-align: middle; text-align: center; word-wrap: ; }
@@ -27,7 +30,7 @@
     .col0 { width: 40px; }
     .col1 { width: 270px; }
     .col2 { width: 160px; }
-    .col3 { width: 80px; }
+    .col3 { width: 70px; }
     .col4 { width: 73px; }
     .col5 { width: 90px; }
     .col6 { width: 74px; }
@@ -54,10 +57,7 @@
         </div>
 
         <template repeat="{{challenge in challenges}}">
-          <challenge-card
-              favorite="{{challenge.favorite}}"
-              on-favorite-tap="{{handleFavorite}}"
-              hidden?="{{show == 'favorites' && !challenge.favorite}}">
+          <challenge-card>
             <div style="vertical-align: middle">
               <div class="ngCell center col0">{{ format_type(challenge.challengeType) }}</div>
               <div class="ngCell col1">
@@ -70,12 +70,17 @@
                 <div class="row">Register by {{ format_date(challenge.registrationEndDate )}}</div>
                 <div class="row">Submit by&nbsp;&nbsp;&nbsp;{{ format_date(challenge.submissionEndDate )}}</div>
               </div>
-              <div class="ngCell center col3"></div>
+              <div class="ngCell center col3">{{ format_time_left(challenge.currentPhaseName, challenge.registrationStartDate, challenge.registrationEndDate, challenge.submissionEndDate) }}</div>
               <div class="ngCell center col4">
                 <div class="row">{{ format_currency(challenge.firstPlacePrize)}}</div>
                 <div class="row">{{ format_currency(challenge.totalPrize - challenge.firstPlacePrize )}}</div>
               </div>
-              <div class="ngCell center col5">{{ challenge.currentPhaseName }}</div>
+              <div class="ngCell center col5">
+                <template if="{{ challenge.registrationOpen == 'Yes' }}">
+                    <a href="{{'https://www.topcoder.com/challenge-details/'+ challenge.challengeId +'/?type=develop&lc='}}">{{ challenge.currentPhaseName }}</a>
+                </template>
+                <template if="{{ challenge.registrationOpen != 'Yes' }}">{{ challenge.currentPhaseName }}</template>
+              </div>
               <div class="ngCell center col6">{{ challenge.numRegistrants || '' }}</div>
               <div class="ngCell center col7">{{ challenge.numSubmissions || '' }}</div>
               <div class="ngCell center col8"><a href="{{ 'http://apps.topcoder.com/forums/?module=Category&categoryID='+ challenge.forumId }}">Forum</a></div>
@@ -111,6 +116,45 @@
     },
     format_date: function(d) {
       return d.substr(0, 10);
+    },
+    format_time_left: function(currentPhaseName, registrationStartDate, registrationEndDate, submissionEndDate) {
+      var now = Date.now();
+      var regStart = Date.parse(registrationStartDate);
+      var regEnd = Date.parse(registrationEndDate);
+      var subEnd = Date.parse(submissionEndDate);
+      var delta = 0;
+      if (now < regStart) {
+        delta = regStart - now;
+      }
+      else if (now < regEnd) {
+        delta = regEnd - now;
+      }
+      else {
+        delta = subEnd - now;
+      }
+      var text = '-';
+      delta = delta / 1000;
+      if (delta >= 86400) {
+        var days = parseInt(delta / 86400);
+        text = days +'\u00A0day' +(days > 1 ? 's' : '');
+        var hours = parseInt((delta % 86400) / 3600);
+        if (hours > 0) {
+          text += ', '+ hours +'\u00A0hour' +(hours > 1 ? 's' : '');
+        }
+      }
+      else if (delta >= 3600) {
+        var hours = parseInt(delta / 3600);
+        text = hours +'\u00A0hour' +(hours > 1 ? 's' : '');
+      }
+      else if (delta >= 60) {
+        var minutes = parseInt(delta / 60);
+        text = minutes +'\u00A0minute' +(minutes > 1 ? 's' : '');
+      }
+      else if (delta > 0) {
+        var seconds = delta;
+        text = seconds +'\u00A0second' +(seconds > 1 ? 's' : '');
+      }
+      return text;
     },
     format_currency: function(a) {
       return a ? '$'+ a : '';
