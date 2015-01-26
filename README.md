@@ -1,6 +1,6 @@
-# A demo Polymer static app. Skins the (topcoder.com)[https://www.topcoder.com/challenges/develop/active/?pageIndex=1] challenges list.
+# PolyTopcoder
 
-Based on the Polymer components [tutorial and starter project](http://polymer-project.org/docs/start/tutorial/intro.html).
+A demo Polymer static app. Skins the (topcoder.com)[https://www.topcoder.com/challenges/develop/active/?pageIndex=1] challenges list. Based on the Polymer components [tutorial and starter project](http://polymer-project.org/docs/start/tutorial/intro.html).
 
 ## Features
 
