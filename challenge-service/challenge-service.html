@@ -14,34 +14,36 @@
 
 <!--
   An array of challenge objects, with the following format:
-
-  <table border="0">
-    <tr>
-      <td><code>uid</code></td>
-      <td>Number</td>
-      <td>Unique ID for this challenge.</td>
-    </tr>
-     <tr>
-      <td><code>username</code></td>
-      <td>String</td>
-      <td>Poster's username.</td>
-    </tr>
-    <tr>
-      <td><code>avatar</code></td>
-      <td>String</td>
-      <td>URL for the user's avatar.</td>
-    </tr>  
-    <tr>
-      <td><code>text</code></td>
-      <td>String</td>
-      <td>Post text.</td>
-    </tr>  
-    <tr>
-      <td><code>favorite</code></td>
-      <td>Boolean</td>
-      <td>True if the current user favorited this challenge.</td>
-    </tr>
-  </table>
+    {
+      "submissionEndDate": "2015-02-21T14:21:00.000-0500",
+      "currentPhaseRemainingTime": 2310359,
+      "challengeName": "Hercules OnCampus Backend Server - Heroku deployment",
+      "eventId": 0,
+      "platforms": [
+        "Heroku"
+      ],
+      "registrationOpen": "Yes",
+      "totalPrize": 400,
+      "numRegistrants": 18,
+      "numberOfCheckpointsPrizes": 0,
+      "challengeId": 30048557,
+      "numSubmissions": 1,
+      "registrationStartDate": "2015-01-22T14:16:19.055-0500",
+      "status": "Active",
+      "registrationEndDate": "2015-02-21T14:16:00.000-0500",
+      "currentPhaseEndDate": "2015-02-21T14:16:00.000-0500",
+      "technologies": [
+        "Java"
+      ],
+      "firstPlacePrize": 400,
+      "forumId": 27906,
+      "isPrivate": false,
+      "currentPhaseName": "Registration",
+      "challengeType": "First2Finish",
+      "checkpointSubmissionEndDate": "",
+      "reliabilityBonus": 80,
+      "challengeCommunity": "develop"
+    }
   
   @attribute challenges 
   @type Array
@@ -66,9 +68,32 @@
     created: function() {
       this.challenges = [];
     },
+    compare: function(x, y) {
+      if (x < y) {
+        return -1;
+      } else if (x > y) {
+        return 1;
+      }
+      return 0;
+    },
+    phaseDate: function(challenge) {
+      if (challenge.currentPhaseEndDate == challenge.registrationStartDate) {
+        return 'Z-'+ challenge.registrationStartDate;
+      }
+      else if (challenge.currentPhaseEndDate == challenge.registrationEndDate) {
+        return 'R-'+ challenge.registrationStartDate;
+      }
+      else if (challenge.currentPhaseEndDate == challenge.submissionEndDate) {
+        return 'M-'+ challenge.currentPhaseEndDate;
+      }
+      return 'A-'+ challenge.submissionEndDate;
+    },
     challengesLoaded: function() {
+      var self = this;
       // Make a copy of the loaded data
-      this.challenges = this.$.ajax.response.data.slice(0);
+      this.challenges = this.$.ajax.response.data.slice(0).sort(function(a, b) {
+          return -self.compare(self.phaseDate(a), self.phaseDate(b));
+        });
     },
     /** 
      * Update the service with the current favorite value.
