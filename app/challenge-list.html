@@ -20,8 +20,8 @@
     }
     * { margin: 0; padding: 0; border: 0; font-size: 100%; vertical-align: baseline; }
     .challengesGrid { margin: auto; font-size: 12px; font-weight: 400; font-family: 'Source Sans Pro',Arial,Helvetica,sans-serif; }
-    .challengesGrid .ngHeaderCell { background-color: #f1f1f1; color: #666; line-height: 30px; vertical-align: middle; text-align: center; word-wrap: ; }
-    .ngHeaderCell { display: inline-block; vertical-align: middle; }
+    .challengesGrid .ngHeaderCell { background-color: #f1f1f1; color: #666; line-height: 36px; vertical-align: middle; text-align: center; word-wrap: ; }
+    .ngHeaderCell { display: inline-block; vertical-align: middle; font-size: 12px; font-weight: bold; }
     .ngCell { display: inline-block; vertical-align: middle; }
     .techTags { margin: 1px 9px; }
     .techTag { color: #666; font-size: 11px; padding: 1px 1px; border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px; background-color: #f1f1f1; }
@@ -45,7 +45,7 @@
 
       <div class="challengesGrid">
         <div class="challengeHeader">
-          <div class="ngHeaderCell col0">&nbsp;</div>
+          <div class="ngHeaderCell col0"><img src="https://www.topcoder.com/wp-content/themes/tcs-responsive/i/ico-track-develop.png" style="vertical-align: top"/></div>
           <div class="ngHeaderCell col1">Challenge</div>
           <div class="ngHeaderCell col2">Timeline</div>
           <div class="ngHeaderCell col3">Time Left</div>
@@ -59,7 +59,7 @@
         <template repeat="{{challenge in challenges}}">
           <challenge-card>
             <div style="vertical-align: middle">
-              <div class="ngCell center col0">{{ format_type(challenge.challengeType) }}</div>
+              <div class="ngCell center col0" style="height: 39px; vertical-align: top; line-height: 100%; color: #f1f1f1; background-image: url('https://www.topcoder.com/wp-content/themes/tcs-responsive/i/tco-flag-develop.png')"><br/>{{ format_type(challenge.challengeType) }}</div>
               <div class="ngCell col1">
                 <div><a href="{{'https://www.topcoder.com/challenge-details/'+ challenge.challengeId +'/?type=develop&lc='}}">{{ challenge.challengeName }}</a></div>
                 <div style="line-height: 70%">&nbsp;</div>
