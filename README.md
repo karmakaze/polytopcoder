@@ -12,4 +12,5 @@ Find a problem in the tutorial? Please open a [bug](https://github.com/karmakaze
 
 ## Run It!
 
-- The app can be run directly from (rawgit)[http://cdn.rawgit.com/karmakaze/polytopcoder/master/app/index.html]
+- The app can be run directly from [rawgit CDN](http://cdn.rawgit.com/karmakaze/polytopcoder/master/app/index.html)
+- [RawGit](https://rawgit.com) is pretty frickin' cool.
