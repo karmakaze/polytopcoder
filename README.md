@@ -14,3 +14,4 @@ Find a problem in the tutorial? Please open a [bug](https://github.com/karmakaze
 
 - The app can be run directly from [rawgit CDN](http://cdn.rawgit.com/karmakaze/polytopcoder/master/app/index.html)
 - [RawGit](https://rawgit.com) is pretty frickin' cool.
+- [Polymer cheet sheet](http://www.cheatography.com/jonathanberi/cheat-sheets/polymer-js/)
