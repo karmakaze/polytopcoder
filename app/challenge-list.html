@@ -27,15 +27,14 @@
     .techTag { color: #666; font-size: 11px; padding: 1px 1px; border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px; background-color: #f1f1f1; }
     .center { text-align: center; }
     .colTime .row { line-height: 16px; font-size: 11px; }
-    .col0 { width: 40px; }
-    .col1 { width: 270px; }
-    .col2 { width: 160px; }
-    .col3 { width: 70px; }
-    .col4 { width: 73px; }
-    .col5 { width: 90px; }
-    .col6 { width: 80px; }
-    .col7 { width: 74px; }
-    .col8 { width: 60px; }
+    .col-icon { width: 40px; }
+    .col-challenge { width: 270px; }
+    .col-prize { width: 73px; }
+    .col-reg-sub { width: 80px; }
+    .col-dates { width: 160px; }
+    .col-remain { width: 70px; }
+    .col-phase { width: 90px; }
+    .col-forum { width: 60px; }
     </style>
     
     <challenge-service id="service" challenges="{{challenges}}"></challenge-service>
@@ -45,43 +44,43 @@
 
       <div class="challengesGrid">
         <div class="challengeHeader">
-          <div class="ngHeaderCell col0"><img src="https://www.topcoder.com/wp-content/themes/tcs-responsive/i/ico-track-develop.png" style="vertical-align: top"/></div>
-          <div class="ngHeaderCell col1">Challenge</div>
-          <div class="ngHeaderCell col2">Timeline</div>
-          <div class="ngHeaderCell col3">Time Left</div>
-          <div class="ngHeaderCell col4">Prize</div>
-          <div class="ngHeaderCell col5">Current Phase</div>
-          <div class="ngHeaderCell col6" style="height: 36px"><div style="display: inline-block; vertical-align: middle; line-height: 100%">Registrants<br/>Submissions</div></div>
-          <div class="ngHeaderCell col8">Forum</div>
+          <div class="ngHeaderCell col-icon"><img src="https://www.topcoder.com/wp-content/themes/tcs-responsive/i/ico-track-develop.png" style="vertical-align: top"/></div>
+          <div class="ngHeaderCell col-challenge">Challenge</div>
+          <div class="ngHeaderCell col-prize">Prize</div>
+          <div class="ngHeaderCell col-reg-sub" style="height: 36px"><div style="display: inline-block; vertical-align: middle; line-height: 100%">Registrants<br/>Submissions</div></div>
+          <div class="ngHeaderCell col-dates">Timeline</div>
+          <div class="ngHeaderCell col-remain">Time Left</div>
+          <div class="ngHeaderCell col-phase">Current Phase</div>
+          <div class="ngHeaderCell col-forum">Forum</div>
         </div>
 
         <template repeat="{{challenge in challenges}}">
           <challenge-card>
             <div style="vertical-align: middle">
-              <div class="ngCell center col0" style="height: 39px; vertical-align: top; line-height: 100%; color: #f1f1f1; background-image: url('https://www.topcoder.com/wp-content/themes/tcs-responsive/i/tco-flag-develop.png')"><br/>{{ format_type(challenge.challengeType) }}</div>
-              <div class="ngCell col1">
+              <div class="ngCell center col-icon" style="height: 39px; vertical-align: top; line-height: 100%; color: #f1f1f1; background-image: url('https://www.topcoder.com/wp-content/themes/tcs-responsive/i/tco-flag-develop.png')"><br/>{{ format_type(challenge.challengeType) }}</div>
+              <div class="ngCell col-challenge">
                 <div><a href="{{'https://www.topcoder.com/challenge-details/'+ challenge.challengeId +'/?type=develop&lc='}}">{{ challenge.challengeName }}</a></div>
                 <div style="line-height: 70%">&nbsp;</div>
                 <div class="techTags"><span class="techTag">{{ format_platform_tech(challenge.platforms, challenge.technologies )}}</span></div>
               </div>
-              <div class="ngCell colTime center col2">
+              <div class="ngCell center col-prize">
+                <div class="row">{{ format_currency(challenge.firstPlacePrize)}}</div>
+                <div class="row">{{ format_currency(challenge.totalPrize - challenge.firstPlacePrize )}}</div>
+              </div>
+              <div class="ngCell center col-reg-sub">{{ challenge.numRegistrants || '' }} {{ challenge.numSubmissions ? '('+challenge.numSubmissions+')' : '' }}</div>
+              <div class="ngCell colTime center col-dates">
                 <div class="row">Start date&nbsp;&nbsp;&nbsp;{{ format_date(challenge.registrationStartDate )}}</div>
                 <div class="row">Register by {{ format_date(challenge.registrationEndDate )}}</div>
                 <div class="row">Submit by&nbsp;&nbsp;&nbsp;{{ format_date(challenge.submissionEndDate )}}</div>
               </div>
-              <div class="ngCell center col3">{{ format_time_left(challenge.currentPhaseName, challenge.registrationStartDate, challenge.registrationEndDate, challenge.submissionEndDate) }}</div>
-              <div class="ngCell center col4">
-                <div class="row">{{ format_currency(challenge.firstPlacePrize)}}</div>
-                <div class="row">{{ format_currency(challenge.totalPrize - challenge.firstPlacePrize )}}</div>
-              </div>
-              <div class="ngCell center col5">
+              <div class="ngCell center col-remain">{{ format_time_left(challenge.currentPhaseName, challenge.registrationStartDate, challenge.registrationEndDate, challenge.submissionEndDate) }}</div>
+              <div class="ngCell center col-phase">
                 <template if="{{ challenge.registrationOpen == 'Yes' }}">
                     <a href="{{'https://www.topcoder.com/challenge-details/'+ challenge.challengeId +'/?type=develop&lc='}}">{{ challenge.currentPhaseName }}</a>
                 </template>
                 <template if="{{ challenge.registrationOpen != 'Yes' }}">{{ challenge.currentPhaseName }}</template>
               </div>
-              <div class="ngCell center col6">{{ challenge.numRegistrants || '' }} {{ challenge.numSubmissions ? '('+challenge.numSubmissions+')' : '' }}</div>
-              <div class="ngCell center col8"><a href="{{ 'http://apps.topcoder.com/forums/?module=Category&categoryID='+ challenge.forumId }}">Forum</a></div>
+              <div class="ngCell center col-forum"><a href="{{ 'http://apps.topcoder.com/forums/?module=Category&categoryID='+ challenge.forumId }}">Forum</a></div>
             </div>
           </challenge-card>
         </template>
